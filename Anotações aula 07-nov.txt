@@ -22,5 +22,6 @@ Entregáveis:
 
 
 - Ver com o Tiago:
-    - Como faz pra rodar o Mininet e o Ryu por script
+    - Como faz pra rodar o Mininet e o Ryu por script - rodar Ryu na mão e mininet pelo script
     - Como checar se um pacote está fazendo flooding
+    - Ver que versão do Protocolo usaremos (pode ser 1.3?)
