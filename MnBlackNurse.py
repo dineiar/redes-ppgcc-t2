@@ -28,7 +28,7 @@ if __name__ == "__main__":
     if not geteuid() == 0:
         exit("[!] Must be run as sudo")
 
-    nodes = 3
+    nodes = 2
 
     print("[*] Starting single switch Mininet topology with %d nodes" % nodes)
 
@@ -36,7 +36,8 @@ if __name__ == "__main__":
     net = Mininet(topo=topology)
     net.start()
 
-    h1, h2, h3  = net.hosts[0], net.hosts[1], net.hosts[2]
+    # h1, h2, h3  = net.hosts[0], net.hosts[1], net.hosts[2]
+    h1, h2  = net.hosts[0], net.hosts[1]
     # help(h1)
 
     print("Hosts:")
