@@ -63,14 +63,14 @@ class BlackNurseAwareSwitch(app_manager.RyuApp):
         src = eth.src
 
         # self.logger.info("packet in %s %s", datapath.id, msg.in_port)
-        self.logger.info("packet in %s %s %s %s", datapath.id, src, dst, in_port)
+        # self.logger.info("packet in %s %s %s %s", datapath.id, src, dst, in_port)
 
         send_packet_out = True
 
         icmppkt = pkt.get_protocols(icmp.icmp)
         if icmppkt != []:
             if (icmppkt[0].type == 3 and icmppkt[0].code == 3 and isinstance(icmppkt[0].data, icmp.dest_unreach)):
-                print "> Very likely a BlackNurse packet. Add a flow for the next 5 seconds: ", icmppkt[0]
+                self.logger.info("Very likely a BlackNurse packet. Add a flow for the next 5 seconds.")
 
                 actions = [parser.OFPActionOutput(out_port)]
                 inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
@@ -109,7 +109,6 @@ class BlackNurseAwareSwitch(app_manager.RyuApp):
         match = msg.match
 
         src = match['eth_src']
-
         
         if ofproto.OFP_VERSION == ofproto_v1_3.OFP_VERSION:
             if msg.reason == ofproto.OFPRR_HARD_TIMEOUT: # or msg.reason == ofproto.OFPRR_IDLE_TIMEOUT:
@@ -121,7 +120,7 @@ class BlackNurseAwareSwitch(app_manager.RyuApp):
                         seconds = msg.duration_sec
                         self.logger.info("Flow matched %d packets in %d seconds: %d packets per sec", packets, seconds, packets/seconds)
                         if packets/seconds > self.packets_per_sec_threshold:
-                            self.logger.info("Blocking "+src+" for blacknurse")
+                            self.logger.info(">> Blocking "+src+" for blacknurse for " + str(self.timeout_block) + " seconds <<")
 
                             # Tell switch to drop the packets
                             # https://stackoverflow.com/a/41068251/3136474
